@@ -350,7 +350,7 @@ public:
     std::move(to_iterator(last), end(), to_iterator(first));
     detail::destroy(to_iterator(last), end());
     _end = to_pointer(last);
-    return last;
+    return const_cast<iterator>(last);
   }
   template<typename U = T>
   auto push_back(T const& value) -> typename std::enable_if<std::is_copy_constructible<U>::value, T&>::type

@@ -208,7 +208,7 @@ auto mknejp::vmcontainer::detail::destroy_at(T* p) -> void
 template<typename ForwardIt>
 auto mknejp::vmcontainer::detail::destroy(ForwardIt first, ForwardIt last) -> void
 {
-  std::for_each(first, last, [](auto& x) { destroy_at(std::addressof(x)); });
+  std::for_each(first, last, [](auto& x) { detail::destroy_at(std::addressof(x)); });
 }
 
 template<typename InputIt, typename ForwardIt>
@@ -226,12 +226,12 @@ auto mknejp::vmcontainer::detail::uninitialized_move_n(InputIt first, std::size_
   {
     for(std::size_t i = 0; i < count; ++first, (void)++current, ++i)
     {
-      construct_at(std::addressof(*current), std::move(*first));
+      detail::construct_at(std::addressof(*current), std::move(*first));
     }
   }
   catch(...)
   {
-    destroy(d_first, current);
+    detail::destroy(d_first, current);
     throw;
   }
   return {first, current};
@@ -245,12 +245,12 @@ auto mknejp::vmcontainer::detail::uninitialized_value_construct_n(ForwardIt firs
   {
     for(std::size_t i = 0; i < count; ++i, (void)++current)
     {
-      construct_at(std::addressof(*current));
+      detail::construct_at(std::addressof(*current));
     }
   }
   catch(...)
   {
-    destroy(first, current);
+    detail::destroy(first, current);
     throw;
   }
   return current;
